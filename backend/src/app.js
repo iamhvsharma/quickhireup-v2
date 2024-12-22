@@ -1,0 +1,34 @@
+import express from "express";
+import cors from "cors";
+import jobSeekerRoutes from './routes/jobseeker.routes.js';
+import jobPostingRoutes from './routes/jobpostingform.routes.js';
+import authRoutes from './routes/auth.routes.js';
+
+const app = express();
+
+// CORS configuration
+app.use(cors({
+    origin: 'http://localhost:5173', // Your frontend URL 
+    credentials: true
+}));
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// Serve uploaded files statically
+app.use('/uploads', express.static('uploads'));
+
+// Routes
+app.use('/api/jobseekers', jobSeekerRoutes);
+app.use('/api/jobs', jobPostingRoutes);
+app.use('/api/auth', authRoutes);
+
+// Basic route for testing
+app.get('/health', (req, res) => {
+    res.status(200).json({
+        status: "success",
+        message: "Server is running"
+    });
+});
+
+export { app };
